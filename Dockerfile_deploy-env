@@ -1,0 +1,24 @@
+# Build stage
+FROM python:3.9-slim as builder
+
+WORKDIR /app
+COPY requirements.txt requirements.txt
+COPY start.sh start.sh
+COPY main.py main.py
+
+# Production stage
+FROM python:3.9-slim
+RUN apt-get update && apt-get install -y curl zabbix-agent2 rsyslog
+COPY zabbix_agent2.conf /etc/zabbix/zabbix_agent2.conf
+
+COPY rsyslog.conf /etc/rsyslog.conf
+RUN mkdir -p /var/log && touch /var/log/out.log /var/log/error.log
+RUN chmod 666 /var/log/out.log /var/log/error.log
+
+WORKDIR /app
+COPY --from=builder /app /app
+RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 5000 10050
+
+RUN chmod +x start.sh
+CMD ["./start.sh"]
