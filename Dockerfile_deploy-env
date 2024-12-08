@@ -21,9 +21,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000 10050
 
 RUN useradd -m jenkins
-USER jenkins
-RUN chmod +x run_tests.sh
-USER root
+RUN usermod -aG docker jenkins
+RUN chown jenkins:jenkins /run_tests.sh && chmod +x /run_tests.sh
 
 RUN chmod +x start.sh
 CMD ["./start.sh"]
