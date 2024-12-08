@@ -5,6 +5,8 @@ WORKDIR /app
 COPY requirements.txt requirements.txt
 COPY start.sh start.sh
 COPY main.py main.py
+COPY tests/test_app.py tests/test_app.py
+COPY run_tests.sh run_tests.sh
 
 # Production stage
 FROM python:3.9-slim
@@ -21,4 +23,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000 10050
 
 RUN chmod +x start.sh
+RUN chmod +x run_tests.sh
 CMD ["./start.sh"]
