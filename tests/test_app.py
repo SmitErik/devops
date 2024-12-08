@@ -1,11 +1,11 @@
 import sys
 import os
 import requests
+import unittest
+from main import app
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import unittest
-from main import app
 
 class TestApp(unittest.TestCase):
     def setUp(self):
@@ -23,17 +23,15 @@ class TestApp(unittest.TestCase):
                 url = f'http://localhost:{port}{endpoint}'
                 try:
                     response = requests.get(url)
-                    if response.status_code == 200:
-                        print(f'{port} on {endpoint} - OK')
-                        successful_tests += 1
-                    else:
-                        print(f'{port} on {endpoint} - Failed with status code {response.status_code}')
-                        failed_tests += 1
+                    self.assertEqual(response.status_code, 200)
+                    print(f'{port} on {endpoint} - OK')
+                    successful_tests += 1
                 except requests.exceptions.RequestException as e:
                     print(f'{port} on {endpoint} - Failed with error: {e}')
                     failed_tests += 1
 
         print(f'\nTests completed. Successful: {successful_tests}, Failed: {failed_tests}')
+        self.assertGreater(successful_tests, 0, "No successful tests")
 
 
 if __name__ == '__main__':
