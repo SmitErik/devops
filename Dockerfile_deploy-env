@@ -20,8 +20,6 @@ COPY --from=builder /app /app
 RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 5000 10050
 
-RUN useradd -m jenkins
-RUN chown jenkins:jenkins /run_tests.sh && chmod +x /run_tests.sh
-
+RUN chmod +x run_tests.sh
 RUN chmod +x start.sh
 CMD ["./start.sh"]
