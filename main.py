@@ -91,7 +91,10 @@ def current_time():
 @app.route('/fun_fact', methods=['GET'])
 def fun_fact():
     start_time = time.time()
-    fun_fact = "A banán bogyós gyümölcs, míg az eper nem."
+    fun_fact = render_template_string('''
+        <p>Néhány hete megjelent egy zene egy Java kódról:</p>
+        <p><a href=https://www.youtube.com/watch?v=yup8gIXxWDU>NANOWAR OF STEEL - HelloWorld.java</a></p>
+    ''')
     response = fun_fact
     elapsed_time = time.time() - start_time
     http_request_duration.labels(method='GET', path='/fun_fact', status_code='200').observe(elapsed_time)
